@@ -1,0 +1,4 @@
+Requirement already satisfied: rpy2 in /work/user/guoh/soft/anaconda2/lib/python2.7/site-packages/rpy2-2.8.2-py2.7-linux-x86_64.egg
+Requirement already satisfied: six in /work/user/guoh/soft/anaconda2/lib/python2.7/site-packages (from rpy2)
+Requirement already satisfied: singledispatch in /work/user/guoh/soft/anaconda2/lib/python2.7/site-packages (from rpy2)
+Cleaning up...
