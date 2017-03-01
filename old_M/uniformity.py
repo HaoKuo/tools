@@ -9,8 +9,6 @@ import os, glob, sys, itertools, gzip
 import multiprocessing
 import subprocess
 import argparse
-from concurrent import futures
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -20,17 +18,17 @@ from dplython import (DplyFrame, X, diamonds, select, sift, sample_n, sample_fra
 
 
 from uniplot import (gen_dot, gen_line)
-from timeFunc import timeit
+
 
 
 def _cmd_single(args):
     """ Plot coverage per base for single covdep.gz file"""
+    #print "hello _cmd_single func!"
+    #print args.input,args.output,args.type
     inputFile = args.input
     outputFile = args.output
     plotType = args.type
-
     if plotType in ('line','dot'):
-        print "Processing {}".format(inputFile)
         if plotType =='line':
             gen_line(inputFile,outputFile)
         else:
@@ -39,37 +37,14 @@ def _cmd_single(args):
         raise ValueError("Unknown plot type %r!" % plotType)
 
 
-def _cmd_batch(args):
-    """ Plot a batch of coverage figs for a directory including a bundle of covdep.gz files. """
-    inputDir = args.input
-    outputDir = args.output
-    plotType = args.type
-    N_CPU = args.processes
-    #print args
-    print "Processing directory: {}".format(inputDir)
-    if not os.path.exists(outputDir):
-        os.mkdir(outputDir)
 
-    if plotType in ('line','dot'):
-        with futures.ProcessPoolExecutor(N_CPU) as pool:
-            try :
-                para = ((gzfile, outputDir+"/"+os.path.basename(gzfile).split(".")[0]+".jpg", plotType) for gzfile in glob.glob(inputDir+"/*covdep.gz"))
-                pool.map(_choosePlotType,para)
-            except (StandardError),e:
-                print 'Error!'
-                sys.exit(0)
-    else:
-        raise ValueError("Unknown plot type %r!" % plotType)
+def parse_args(args=None):
+    """Parse the command line."""
+    return parser.parse_args(args=args)
 
-def _choosePlotType((inputFile,outputFile,plotType)):
-    print outputFile
-    if plotType =='line':
-        gen_line(inputFile,outputFile)
-    else:
-        gen_dot(inputFile, outputFile)
 
-@timeit
 def main():
+    
     sns.set_style("darkgrid")
     plt.rcParams['agg.path.chunksize'] = 20000
     plt.ioff()
@@ -82,14 +57,6 @@ def main():
     P_single.add_argument('-o', '--output', help="Output jpg file name.")
     P_single.add_argument('-t', '--type', choices=('line','dot'), default='line',help="Plot type (line,dot).[Default: %(default)s]")
     P_single.set_defaults(func=_cmd_single)
-
-
-    P_batch = subparsers.add_parser('batchplot', help=_cmd_batch.__doc__)
-    P_batch.add_argument('-i', '--input', help="Input directory of covdep.gz file.")
-    P_batch.add_argument('-o', '--output', help="Output directory of jpg files.")
-    P_batch.add_argument('-t', '--type', choices=('line','dot'), default='line', help="Plot type (line,dot).[Default: %(default)s]")
-    P_batch.add_argument('-p','--processes', type=int, nargs='?', default = 1, help="Number of subprocesses to render the coverage fig in parallel.")
-    P_batch.set_defaults(func=_cmd_batch)
 
     args = parser.parse_args()
     args.func(args)
