@@ -71,7 +71,7 @@ def _choosePlotType((inputFile,outputFile,plotType)):
 @timeit
 def main():
     sns.set_style("darkgrid")
-    plt.rcParams['agg.path.chunksize'] = 20000
+    plt.rcParams['agg.path.chunksize'] = 100000
     plt.ioff()
     #plt.switch_backend('agg')
     parser = argparse.ArgumentParser(description='Uniformity.py, plot tool for coverage uniformity of sequencing data.', epilog='Contact Hao Guo <guo.hao@genecast.com.cn> for help.')

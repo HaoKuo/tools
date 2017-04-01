@@ -7,7 +7,7 @@ from __future__ import division
 __author__ = 'Hao Guo'
 '''
     __doc__
-    Generate annotation of VCF files.
+    Generate annotation (1000 genomes 2015 version) of VCF files.
     e.g.: python annovar_VCF_subs.py vcf_dir
 '''
 import os, sys, re, getopt, time
@@ -36,7 +36,7 @@ def main():
             command1='/work-a/user/zhanggh/Software/ANNOVAR/annovar/table_annovar.pl '
             dbDir=' /work-a/user/zhanggh/Software/ANNOVAR/annovar/humandb'
             tmp_str1=' -buildver hg19 -out '
-            tmp_str2=' -remove -protocol refGene,cytoBand,genomicSuperDups,clinvar_20160302,cosmic70,esp6500siv2_all,1000g2014oct_all,1000g2014oct_afr,1000g2014oct_eas,1000g2014oct_eur,snp138,ljb26_all,exac03 -operation g,r,r,f,f,f,f,f,f,f,f,f,f -nastring . -vcfinput'
+            tmp_str2=' -remove -protocol refGene,cytoBand,genomicSuperDups,clinvar_20160302,cosmic70,esp6500siv2_all,1000g2015aug_all,1000g2015aug_afr,1000g2015aug_eas,1000g2015aug_eur,snp138,ljb26_all,exac03 -operation g,r,r,f,f,f,f,f,f,f,f,f,f -nastring . -vcfinput'
             pool = multiprocessing.Pool(min(20,len(file_path_name)))
 
             for f in file_path_name:
